@@ -172,3 +172,4 @@ power.teleport=Téléporte à %d blocs (%.1fs)
 power.tntcannon=Tire de la TNT (%.1fs)
 power.unbreakable=Ne casse jamais
 power.unbreaking=Durabilité %d
+power.food=Redonne %d point(s) de nourriture

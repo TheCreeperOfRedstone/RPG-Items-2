@@ -17,7 +17,6 @@
 package think.rpgitems.power;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -50,7 +49,7 @@ public class PowerFood extends Power implements PowerRightClick {
 
     @Override
     public void save(ConfigurationSection s) {
-      s.set("food points", foodpoints); 
+      s.set("foodpoints", foodpoints); 
     }
 
     @Override
@@ -60,6 +59,6 @@ public class PowerFood extends Power implements PowerRightClick {
 
     @Override
     public String displayText(String locale) {
-        return ChatColor.GREEN + Locale.get("power.food", locale);
+        return ChatColor.GREEN + String.format(Locale.get("power.food", locale),foodpoints);
     }
 }

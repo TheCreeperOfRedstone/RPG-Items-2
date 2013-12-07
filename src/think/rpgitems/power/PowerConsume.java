@@ -34,7 +34,7 @@ public class PowerConsume extends Power implements PowerRightClick {
         if (count == 0) {
             item.setAmount(0);
             item.setType(Material.AIR);
-            player.setItemInHand(item);
+            player.setItemInHand(null);
         } else {
             item.setAmount(count);
         }
