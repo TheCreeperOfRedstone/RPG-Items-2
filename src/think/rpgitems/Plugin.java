@@ -101,7 +101,7 @@ public class Plugin extends JavaPlugin {
         WorldGuard.init(this);
         ConfigurationSection conf = getConfig();
         if (conf.getBoolean("autoupdate", true)) {
-            new Updater(this, "rpg-items", this.getFile(), Updater.UpdateType.DEFAULT, false);
+            new Updater(this, 70226, this.getFile(), Updater.UpdateType.DEFAULT, false);
         }
         if (conf.getBoolean("localeInv", false)) {
             Events.useLocaleInv = true;
