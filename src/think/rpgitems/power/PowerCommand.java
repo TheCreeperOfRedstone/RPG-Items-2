@@ -37,7 +37,9 @@ public class PowerCommand extends Power implements PowerRightClick, PowerLeftCli
 
     @Override
     public void rightClick(Player player) {
-        if (isRight) {
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{  
+    	if (isRight) {
             long cooldown;
             RPGValue value = RPGValue.get(player, item, "command." + command + ".cooldown");
             if (value == null) {
@@ -67,6 +69,7 @@ public class PowerCommand extends Power implements PowerRightClick, PowerLeftCli
             } else {
                 player.sendMessage(ChatColor.AQUA + String.format(Locale.get("message.cooldown", Locale.getPlayerLocale(player)), ((double) (cooldown - System.currentTimeMillis() / 50)) / 20d));
             }
+        }
         }
     }
 

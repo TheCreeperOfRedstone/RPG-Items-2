@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import think.rpgitems.data.Locale;
 import think.rpgitems.data.RPGValue;
 import think.rpgitems.power.types.PowerRightClick;
 
@@ -35,6 +36,8 @@ public class PowerRush extends Power implements PowerRightClick {
     @Override
     public void rightClick(Player player) {
         long cooldown;
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{
         RPGValue value = RPGValue.get(player, item, "rush.cooldown");
         if (value == null) {
             cooldown = System.currentTimeMillis() / 50;
@@ -45,6 +48,7 @@ public class PowerRush extends Power implements PowerRightClick {
         if (cooldown <= System.currentTimeMillis() / 50) {
             value.set(System.currentTimeMillis() / 50 + cd);
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, time, speed));
+        }
         }
     }
 

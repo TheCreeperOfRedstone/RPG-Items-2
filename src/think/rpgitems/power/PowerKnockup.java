@@ -34,8 +34,9 @@ public class PowerKnockup extends Power implements PowerHit {
     private Random rand = new Random();
 
     @Override
-    public void hit(Player player, LivingEntity e) {
-        if (rand.nextInt(chance) == 0)
+    public void hit(Player player, LivingEntity e, double damage) {
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else if (rand.nextInt(chance) == 0)
             e.setVelocity(player.getLocation().getDirection().setY(power));
     }
 

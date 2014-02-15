@@ -22,7 +22,9 @@ public class PowerSkyHook extends Power implements PowerRightClick {
     
     @Override
     public void rightClick(final Player player) {
-        RPGValue isHooking = RPGValue.get(player, item, "skyhook.isHooking");
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{ 
+    	RPGValue isHooking = RPGValue.get(player, item, "skyhook.isHooking");
         if (isHooking == null) {
             isHooking = new RPGValue(player, item, "skyhook.isHooking", false);
         }
@@ -84,7 +86,7 @@ public class PowerSkyHook extends Power implements PowerRightClick {
             }
         }).runTaskTimer(Plugin.plugin, 0, 0);
     }
-
+    }
     @Override
     public void init(ConfigurationSection s) {
         railMaterial = Material.valueOf(s.getString("railMaterial", "GLASS"));

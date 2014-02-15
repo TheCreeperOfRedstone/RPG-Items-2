@@ -21,6 +21,7 @@ import think.rpgitems.power.PowerFlame;
 import think.rpgitems.power.PowerFood;
 import think.rpgitems.power.PowerIce;
 import think.rpgitems.power.PowerKnockup;
+import think.rpgitems.power.PowerLifeSteal;
 import think.rpgitems.power.PowerLightning;
 import think.rpgitems.power.PowerPotionHit;
 import think.rpgitems.power.PowerPotionSelf;
@@ -196,6 +197,19 @@ public class PowerHandler implements CommandHandler {
         PowerFlame pow = new PowerFlame();
         pow.item = item;
         pow.burnTime = burnTime;
+        item.addPower(pow);
+        ItemManager.save(Plugin.plugin);
+        sender.sendMessage(ChatColor.AQUA + Locale.get("message.power.ok", locale));
+    }
+    
+    @CommandString("rpgitem $n[] power lifesteal $chance:i[]")
+    @CommandDocumentation("$command.rpgitem.lifesteal")
+    @CommandGroup("item_power_lifesteal")
+    public void lifsteal(CommandSender sender, RPGItem item, int chance) {
+        String locale = sender instanceof Player ? Locale.getPlayerLocale((Player) sender) : "en_GB";
+        PowerLifeSteal pow = new PowerLifeSteal();
+        pow.item = item;
+        pow.chance = chance;
         item.addPower(pow);
         ItemManager.save(Plugin.plugin);
         sender.sendMessage(ChatColor.AQUA + Locale.get("message.power.ok", locale));

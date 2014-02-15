@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -43,14 +45,8 @@ import think.rpgitems.item.RPGItem;
 
 public class Locale extends BukkitRunnable {
     
-    private static Method getHandle;
-    private static Method getLocale;
-    private static Field language;
-    private static boolean canLocale = true;
-    private static boolean firstTime = true;
-    
     private static HashMap<String, HashMap<String, String>> localeStrings = new HashMap<String, HashMap<String,String>>();
-    
+    private static FileConfiguration config = think.rpgitems.Plugin.config;
     private Plugin plugin;
     private long lastUpdate = 0;
     private File dataFolder;
@@ -73,7 +69,7 @@ public class Locale extends BukkitRunnable {
     }
     
     private final static String localeUpdateURL = "http://198.199.127.128/rpgitems/index.php?page=localeget&lastupdate=";
-    private final static String localeDownloadURL = "http://198.199.127.128/rpgitems/locale/%s/%s.lang";
+    private final static String localeDownloadURL = "http://www.rpgitems2.bugs3.com/locale/%s/%s.lang";
     
     public static Set<String> getLocales() {
         return localeStrings.keySet();
@@ -130,32 +126,8 @@ public class Locale extends BukkitRunnable {
     public static void reloadLocales(Plugin plugin) {
         localeStrings.clear();
         localeStrings.put("en_GB", loadLocaleStream(plugin.getResource("locale/en_GB.lang")));
-
-        File localesFolder = new File(plugin.getDataFolder(), "locale/");
-        localesFolder.mkdirs();
-        
-        for (File file : localesFolder.listFiles()) {
-            if (!file.isDirectory() && file.getName().endsWith(".lang")) {
-
-                FileInputStream in = null;
-                try {
-                    String locale = file.getName().substring(0, file.getName().lastIndexOf('.'));
-                    HashMap<String, String> map = localeStrings.get(locale);
-                    map = map == null ? new HashMap<String, String>() : map;
-                    in = new FileInputStream(file);
-                    localeStrings.put(locale, loadLocaleStream(in, map));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                
-            }
-        }
+        localeStrings.put("fr_FR", loadLocaleStream(plugin.getResource("locale/fr_FR.lang")));
+        localeStrings.put("es_ES", loadLocaleStream(plugin.getResource("locale/es_ES.lang")));
     }
     
     private static HashMap<String, String> loadLocaleStream(InputStream in, HashMap<String, String> map) {
@@ -179,36 +151,20 @@ public class Locale extends BukkitRunnable {
     private static HashMap<String, String> loadLocaleStream(InputStream in) {
         return loadLocaleStream(in, new HashMap<String, String>());
     }
-    
+
     public static String getPlayerLocale(Player player) {
-        if (firstTime) {
-            try {
-                getHandle = player.getClass().getMethod("getHandle", (Class<?>[]) null);
-                getLocale = getHandle.getReturnType().getMethod("getLocale", (Class<?>[]) null);
-                language = getLocale.getReturnType().getDeclaredField("e");
-                language.setAccessible(true);
-                if (!language.getType().equals(String.class)) {
-                    canLocale = false;
-                }
-            } catch (Exception e) {
-                Plugin.plugin.getLogger().warning("Failed to get player locale");
-                canLocale = false;
-            }
-            firstTime = false;
-        }
-        if (!canLocale) {
-            return "en_GB";
-        }
-        try {
-            Object minePlayer = getHandle.invoke(player,(Object[]) null);
-            Object locale = getLocale.invoke(minePlayer, (Object[]) null);
-            return (String) language.get(locale);
-        } catch (Exception e) {
-            Plugin.plugin.getLogger().warning("Failed to get player locale");
-            canLocale = false;
-        } 
-        //Any error default to en_GB
-        return "en_GB";
+    	String language = config.getString("language");
+    	
+    	if(language.equals("es_ES")){
+    		return "es_ES";
+    	}else if(language.equals("fr_FR")){
+    		return "fr_FR";
+    	}else if(language.equals("en_GB")){
+    		return "en_GB";
+    	}else{
+    		Plugin.plugin.getLogger().warning("Error language you've set : '" + language + "' isn't supported or don't exist ! Languages aviables are es_ES, fr_FR and en_GB");
+    		return "en_GB";
+    	}
     }
 
     public static void init(Plugin plugin) {
@@ -219,8 +175,9 @@ public class Locale extends BukkitRunnable {
         if (!localeStrings.containsKey(locale))
             return get(key);
         HashMap<String, String> strings = localeStrings.get(locale);
-        if (strings == null || !strings.containsKey(key))
-            return get(key);
+        if (strings == null || !strings.containsKey(key)){
+        	return get(key);
+        }
         return strings.get(key);
     }
     

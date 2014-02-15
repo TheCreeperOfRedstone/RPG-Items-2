@@ -35,6 +35,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -64,7 +65,9 @@ public class RPGItem {
     private int id;
     private String name;
     private String encodedID;
-
+    
+    private boolean haspermission;
+    private String permission;
     private String displayName;
     private Quality quality = Quality.TRASH;
     private int damageMin = 0, damageMax = 3;
@@ -73,9 +76,8 @@ public class RPGItem {
     private String type = Plugin.plugin.getConfig().getString("defaults.sword", "Sword");
     private String hand = Plugin.plugin.getConfig().getString("defaults.hand", "One handed");
     public boolean ignoreWorldGuard = false;
-
     public List<String> description = new ArrayList<String>();
-
+    
     // Powers
     public ArrayList<Power> powers = new ArrayList<Power>();
     private ArrayList<PowerLeftClick> powerLeftClick = new ArrayList<PowerLeftClick>();
@@ -85,6 +87,7 @@ public class RPGItem {
     private ArrayList<PowerTick> powerTick = new ArrayList<PowerTick>();
 
     // Recipes
+    public int recipechance = 6;
     public boolean hasRecipe = false;
     public List<ItemStack> recipe = null;
 
@@ -161,9 +164,13 @@ public class RPGItem {
                 }
             }
         }
+ 
+        
         encodedID = getMCEncodedID(id);
-
+        haspermission = s.getBoolean("haspermission", false);
+        permission = s.getString("permission", "a.default.permission");
         // Recipes
+        recipechance = s.getInt("recipechance", 6);
         hasRecipe = s.getBoolean("hasRecipe", false);
         if (hasRecipe) {
             recipe = (List<ItemStack>) s.getList("recipe");
@@ -202,11 +209,14 @@ public class RPGItem {
         }
         
         rebuild();
-    }
+        }
+        
 
     public void save(ConfigurationSection s) {
         s.set("name", name);
         s.set("id", id);
+        s.set("haspermission", haspermission);
+        s.set("permission", permission);
         s.set("display", displayName.replaceAll("" + ChatColor.COLOR_CHAR, "&"));
         s.set("quality", quality.toString());
         s.set("damageMin", damageMin);
@@ -240,6 +250,7 @@ public class RPGItem {
         }
 
         // Recipes
+        s.set("recipechance", recipechance);
         s.set("hasRecipe", hasRecipe);
         if (hasRecipe) {
             s.set("recipe", recipe);
@@ -315,9 +326,9 @@ public class RPGItem {
         }
     }
 
-    public void hit(Player player, LivingEntity e) {
+    public void hit(Player player, LivingEntity e, double d) {
         for (PowerHit power : powerHit) {
-            power.hit(player, e);
+            power.hit(player, e, d);
         }
     }
 
@@ -654,6 +665,48 @@ public class RPGItem {
 
     public int getDamageMax() {
         return damageMax;
+    }
+    
+    public int getRecipeChance() {
+        return recipechance;
+    } 
+ 
+    public void setRecipeChance(int p) {
+        setRecipeChance(p, true);
+    }
+
+    public void setRecipeChance(int p, boolean update) {
+        recipechance = p;
+        if (update)
+            rebuild();
+    }
+    
+    public String getPermission() {
+        return permission;
+    } 
+    
+    public boolean getHasPermission() {
+        return haspermission;
+    }
+    
+    public void setPermission(String p) {
+        setPermission(p, true);
+    }
+
+    public void setPermission(String p, boolean update) {
+        permission = p;
+        if (update)
+            rebuild();
+    }
+
+    public void setHaspermission(boolean b) {
+        setHaspermission(b, true);
+    }
+
+    public void setHaspermission(boolean b, boolean update) {
+        haspermission = b;
+        if (update)
+            rebuild();
     }
 
     public void setArmour(int a) {

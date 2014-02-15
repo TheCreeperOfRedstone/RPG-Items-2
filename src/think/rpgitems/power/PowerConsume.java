@@ -29,6 +29,8 @@ public class PowerConsume extends Power implements PowerRightClick {
 
     @Override
     public void rightClick(Player player) {
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{
         ItemStack item = player.getInventory().getItemInHand();
         int count = item.getAmount() - 1;
         if (count == 0) {
@@ -37,6 +39,7 @@ public class PowerConsume extends Power implements PowerRightClick {
             player.setItemInHand(null);
         } else {
             item.setAmount(count);
+        }
         }
     }
 

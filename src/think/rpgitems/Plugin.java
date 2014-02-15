@@ -45,7 +45,9 @@ import think.rpgitems.power.PowerConsume;
 import think.rpgitems.power.PowerFireball;
 import think.rpgitems.power.PowerFlame;
 import think.rpgitems.power.PowerFood;
+import think.rpgitems.power.PowerIce;
 import think.rpgitems.power.PowerKnockup;
+import think.rpgitems.power.PowerLifeSteal;
 import think.rpgitems.power.PowerLightning;
 import think.rpgitems.power.PowerPotionHit;
 import think.rpgitems.power.PowerPotionSelf;
@@ -82,6 +84,7 @@ public class Plugin extends JavaPlugin {
         Power.powers.put("potionhit", PowerPotionHit.class);
         Power.powers.put("teleport", PowerTeleport.class);
         Power.powers.put("fireball", PowerFireball.class);
+        Power.powers.put("ice", PowerIce.class);
         Power.powers.put("knockup", PowerKnockup.class);
         Power.powers.put("rush", PowerRush.class);
         Power.powers.put("potionself", PowerPotionSelf.class);
@@ -92,6 +95,7 @@ public class Plugin extends JavaPlugin {
         Power.powers.put("skyhook", PowerSkyHook.class);
         Power.powers.put("potiontick", PowerPotionTick.class);
         Power.powers.put("food", PowerFood.class);
+        Power.powers.put("lifesteal", PowerLifeSteal.class);
     }
 
     @Override
@@ -137,7 +141,7 @@ public class Plugin extends JavaPlugin {
         }
     }
 
-    private FileConfiguration config;
+    public static FileConfiguration config;
 
     @Override
     public void reloadConfig() {
@@ -165,7 +169,6 @@ public class Plugin extends JavaPlugin {
 
     }
 
-    @Override
     public FileConfiguration getConfig() {
         return config;
     }

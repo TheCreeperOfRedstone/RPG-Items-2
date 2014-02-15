@@ -56,6 +56,8 @@ public class PowerRumble extends Power implements PowerRightClick {
     @Override
     public void rightClick(final Player player) {
         long cooldown;
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{
         RPGValue value = RPGValue.get(player, item, "rumble.cooldown");
         if (value == null) {
             cooldown = System.currentTimeMillis() / 50;
@@ -118,6 +120,7 @@ public class PowerRumble extends Power implements PowerRightClick {
             task.runTaskTimer(Plugin.plugin, 0, 3);
         } else {
             player.sendMessage(ChatColor.AQUA + String.format(Locale.get("message.cooldown", Locale.getPlayerLocale(player)), ((double) (cooldown - System.currentTimeMillis() / 50)) / 20d));
+        }
         }
     }
 

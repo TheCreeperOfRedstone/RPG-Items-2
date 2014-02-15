@@ -33,6 +33,8 @@ public class PowerFireball extends Power implements PowerRightClick {
     @Override
     public void rightClick(Player player) {
         long cooldown;
+        if (item.getHasPermission() == true && player.hasPermission(item.getPermission()) == false){
+        }else{
         RPGValue value = RPGValue.get(player, item, "tnt.fireball");
         if (value == null) {
             cooldown = System.currentTimeMillis() / 50;
@@ -46,6 +48,7 @@ public class PowerFireball extends Power implements PowerRightClick {
             player.launchProjectile(SmallFireball.class);
         } else {
             player.sendMessage(ChatColor.AQUA + String.format(Locale.get("message.cooldown", Locale.getPlayerLocale(player)), ((double) (cooldown - System.currentTimeMillis() / 50)) / 20d));
+        }
         }
     }
 
