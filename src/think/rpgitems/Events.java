@@ -56,6 +56,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import think.rpgitems.data.Locale;
@@ -141,7 +142,7 @@ public class Events implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void onProjectileFire(ProjectileLaunchEvent e) {
-        LivingEntity shooter = e.getEntity().getShooter();
+        ProjectileSource shooter = e.getEntity().getShooter();
         if (shooter instanceof Player) {
             Player player = (Player) shooter;
             ItemStack item = player.getItemInHand();

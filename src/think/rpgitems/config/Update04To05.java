@@ -46,11 +46,9 @@ public class Update04To05 implements Updater {
                 for (String itemKey : itemSection.getKeys(false)) {
                   ConfigurationSection s = itemSection.getConfigurationSection(itemKey);
                   if(!s.contains("haspermission")){
-                	  s.createSection("haspermission");
                 	  s.set("haspermission", "false");
                   }
                   if(!s.contains("permission")){
-                	  s.createSection("permission");
                 	  s.set("permission", "a.default.permission");
                   }
             }
