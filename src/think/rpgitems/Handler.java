@@ -77,7 +77,20 @@ public class Handler implements CommandHandler {
             sender.sendMessage(ChatColor.RED + Locale.get("message.create.fail", locale));
         }
     }
-
+    @CommandString("rpgitem reload")
+    @CommandDocumentation("$command.rpgitem.reload")
+    @CommandGroup("item")
+    public void Rpgreload(CommandSender sender) {
+        try
+		{
+		ItemManager.load(Plugin.plugin);
+		sender.sendMessage(ChatColor.GREEN + "Reload Succes");
+		}
+		catch (Exception e)
+		{
+		sender.sendMessage(ChatColor.RED + "Error Occured");
+		}
+    }
     @CommandString("rpgitem option giveperms")
     @CommandDocumentation("$command.rpgitem.giveperms")
     @CommandGroup("option_giveperms")
